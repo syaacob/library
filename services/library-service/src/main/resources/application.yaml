@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: library-service
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true

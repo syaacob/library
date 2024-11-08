@@ -36,4 +36,12 @@ class BookControllerTest {
         ).andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
 
+    @Test
+    void testSearchBookByTitleShouldSuccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/books")
+                .param("key", "book title")
+                .param("searchBy", "TITLE")
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
+
 }

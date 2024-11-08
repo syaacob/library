@@ -1,5 +1,7 @@
 package com.saiful.library.service;
 
+import com.saiful.library.converter.BookConverter;
+import com.saiful.library.domain.Book;
 import com.saiful.library.domain.RegisterBook;
 import com.saiful.library.entity.BookEntity;
 import com.saiful.library.exception.BookException;
@@ -33,6 +35,22 @@ public class BookServiceImpl implements BookService {
 
         bookRepository.save(bookEntity);
         return bookEntity.getId();
+    }
+
+    @Override
+    public Page<Book> searchBook(String key, String searchBy, Integer size, Integer page) {
+        if("isbn".equals(searchBy)){
+            return bookRepository.findAllByIsbn(key, PageRequest.of(page, size))
+                    .map(BookConverter::convert);
+        }
+        if("author".equals(searchBy)){
+            return bookRepository.findAllByAuthorContains(key, PageRequest.of(page, size))
+                    .map(BookConverter::convert);
+        }
+        else {
+            return bookRepository.findAllByTitleContains(key, PageRequest.of(page, size))
+                    .map(BookConverter::convert);
+        }
     }
 
     private boolean isValidIsbn(RegisterBook request){

@@ -45,7 +45,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
         if(!BookStatus.AVAILABLE.equals(bookEntity.getBookStatus())){
             throw new BookBorrowerException("book not available");
         }
-
+        log.info("version {}", bookEntity.getVersion());
         bookEntity.setBookStatus(BookStatus.BORROWED);
 
         BookBorrowerEntity entity = new BookBorrowerEntity();

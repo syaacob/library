@@ -1,6 +1,8 @@
 package com.saiful.library.controller;
 
 import com.saiful.library.domain.BorrowBookRequest;
+import com.saiful.library.domain.ReturnBook;
+import com.saiful.library.domain.ReturnBookRequest;
 import com.saiful.library.service.BorrowBookService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,11 @@ public class BookBorrowerController {
     public ResponseEntity<Void> borrowBook(@Valid @RequestBody BorrowBookRequest request){
         borrowBookService.borrowBook(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping(path = "/returns")
+    public ResponseEntity<ReturnBook> returnBook(@Valid @RequestBody ReturnBookRequest request) {
+        return ResponseEntity.ok(borrowBookService.returnBook(request));
     }
     
 }

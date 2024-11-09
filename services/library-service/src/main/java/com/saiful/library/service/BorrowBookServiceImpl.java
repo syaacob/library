@@ -12,6 +12,7 @@ import com.saiful.library.repository.BookBorrowerRepository;
 import com.saiful.library.repository.BookRepository;
 import com.saiful.library.repository.BorrowerRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,13 +42,13 @@ public class BorrowBookServiceImpl implements BorrowBookService {
         log.info("processing {} borrowing {}", request.getBorrowerId(), request.getBookId());
 
         BorrowerEntity borrowerEntity = borrowerRepository.findById(request.getBorrowerId())
-                .orElseThrow(() ->new BookBorrowerException("borrower not exist"));
+                .orElseThrow(() ->new BookBorrowerException("borrower not exist", HttpStatus.BAD_REQUEST));
 
         BookEntity bookEntity = bookRepository.findById(request.getBookId())
-                .orElseThrow(() -> new BookBorrowerException("book not exist"));
+                .orElseThrow(() -> new BookBorrowerException("book not exist", HttpStatus.BAD_REQUEST));
 
         if(!BookStatus.AVAILABLE.equals(bookEntity.getBookStatus())){
-            throw new BookBorrowerException("book not available");
+            throw new BookBorrowerException("book not available", HttpStatus.BAD_REQUEST);
         }
         log.info("version {}", bookEntity.getVersion());
         bookEntity.setBookStatus(BookStatus.BORROWED);
@@ -69,7 +70,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
     @Transactional
     public ReturnBook returnBook(ReturnBookRequest request) {
         BookBorrowerEntity returnBook = bookBorrowerRepository.findNotReturnBookId(request.getBookId())
-                .orElseThrow(() -> new BookBorrowerException("cannot find borrowed books"));
+                .orElseThrow(() -> new BookBorrowerException("cannot find borrowed books",HttpStatus.BAD_REQUEST));
         returnBook.setActualReturnDate(LocalDateTime.now());
 
         bookBorrowerRepository.save(returnBook);

@@ -5,6 +5,7 @@ import com.saiful.library.entity.BorrowerEntity;
 import com.saiful.library.exception.BorrowerException;
 import com.saiful.library.repository.BorrowerRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +22,7 @@ public class BorrowerServiceImpl implements BorrowerService {
         log.info("registering {}", request.getName());
         if(borrowerRepository.isEmailExist(request.getEmail())){
             log.warn("email already exist {}", request.getEmail());
-            throw new BorrowerException("email already exist");
+            throw new BorrowerException("email already exist", HttpStatus.BAD_REQUEST);
         }
         BorrowerEntity entity = new BorrowerEntity();
         entity.setEmail(request.getEmail());

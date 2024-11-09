@@ -4,8 +4,10 @@ import com.saiful.library.domain.BorrowBookRequest;
 import com.saiful.library.domain.ReturnBook;
 import com.saiful.library.domain.ReturnBookRequest;
 import com.saiful.library.entity.BookBorrowerEntity;
+import com.saiful.library.entity.BookStatus;
 import com.saiful.library.exception.BookBorrowerException;
 import com.saiful.library.repository.BookBorrowerRepository;
+import com.saiful.library.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +32,9 @@ public class BorrowBookServiceIntgTest {
 
     @Autowired
     private BookBorrowerRepository bookBorrowerRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Test
     void testBorrowBookShouldSuccess() {
@@ -98,6 +103,10 @@ public class BorrowBookServiceIntgTest {
         assertEquals(returnBook.getBorrowId(), 3000L);
         assertNotNull(returnBook.getReturnDate());
         assertNotNull(returnBook.getDuration());
+
+        BookStatus bookStatus = bookRepository.findById(returnBookRequest.getBookId())
+                .get().getBookStatus();
+        assertEquals(BookStatus.AVAILABLE, bookStatus);
 
     }
 

@@ -11,4 +11,5 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
     Page<BookEntity> findAllByIsbn(String isbn, Pageable pageable);
     Page<BookEntity> findAllByTitleContains(String title, Pageable pageable);
     Page<BookEntity> findAllByAuthorContains(String author, PageRequest pageable);
+
 }

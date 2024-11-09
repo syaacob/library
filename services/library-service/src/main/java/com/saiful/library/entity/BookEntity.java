@@ -19,4 +19,10 @@ public class BookEntity {
     private String title;
 
     private String author;
+
+    @Enumerated(EnumType.STRING)
+    private BookStatus bookStatus;
+
+    @Version
+    private Integer version;
 }

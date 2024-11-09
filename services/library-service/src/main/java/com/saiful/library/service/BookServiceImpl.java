@@ -4,6 +4,7 @@ import com.saiful.library.converter.BookConverter;
 import com.saiful.library.domain.Book;
 import com.saiful.library.domain.RegisterBook;
 import com.saiful.library.entity.BookEntity;
+import com.saiful.library.entity.BookStatus;
 import com.saiful.library.exception.BookException;
 import com.saiful.library.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class BookServiceImpl implements BookService {
         bookEntity.setAuthor(request.getAuthor());
         bookEntity.setTitle(request.getTitle());
         bookEntity.setIsbn(request.getIsbn());
+        bookEntity.setBookStatus(BookStatus.AVAILABLE);
 
         bookRepository.save(bookEntity);
         return bookEntity.getId();

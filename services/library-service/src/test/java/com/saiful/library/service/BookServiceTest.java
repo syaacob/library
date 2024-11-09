@@ -29,7 +29,6 @@ class BookServiceTest {
                 .thenReturn(new PageImpl<>(List.of(existingIsbn())));
         bookService = new BookServiceImpl(bookRepository);
 
-
         RegisterBook request = new RegisterBook();
         request.setIsbn("123");
         request.setAuthor("author");

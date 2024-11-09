@@ -10,7 +10,7 @@ public class BookConverter {
         book.setTitle(entity.getTitle());
         book.setAuthor(entity.getAuthor());
         book.setIsbn(entity.getIsbn());
-
+        book.setStatus(entity.getBookStatus());
         return book;
     }
 }

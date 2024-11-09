@@ -1,6 +1,8 @@
 package com.saiful.library.service;
 
 import com.saiful.library.domain.BorrowBookRequest;
+import com.saiful.library.domain.ReturnBook;
+import com.saiful.library.domain.ReturnBookRequest;
 import com.saiful.library.entity.BookBorrowerEntity;
 import com.saiful.library.entity.BookEntity;
 import com.saiful.library.entity.BookStatus;
@@ -13,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -59,5 +64,24 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 
 
         return entity.getId();
+    }
+
+    @Override
+    public ReturnBook returnBook(ReturnBookRequest request) {
+        BookBorrowerEntity returnBook = bookBorrowerRepository.findNotReturnBookId(request.getBookId())
+                .orElseThrow(() -> new BookBorrowerException("cannot find borrowed books"));
+        returnBook.setActualReturnDate(LocalDateTime.now());
+
+        LocalDate borrowDate = returnBook.getBorrowDate().toLocalDate();
+        LocalDate returnDate = LocalDate.now();
+
+        Long duration = ChronoUnit.DAYS.between(borrowDate, returnDate);
+
+        ReturnBook response = new ReturnBook();
+        response.setBorrowId(returnBook.getId());
+        response.setBorrowDate(borrowDate);
+        response.setReturnDate(returnDate);
+        response.setDuration(duration);
+        return response;
     }
 }

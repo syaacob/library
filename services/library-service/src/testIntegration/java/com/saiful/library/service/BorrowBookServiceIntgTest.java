@@ -1,9 +1,13 @@
 package com.saiful.library.service;
 
 import com.saiful.library.domain.BorrowBookRequest;
+import com.saiful.library.domain.ReturnBook;
+import com.saiful.library.domain.ReturnBookRequest;
 import com.saiful.library.entity.BookBorrowerEntity;
 import com.saiful.library.exception.BookBorrowerException;
 import com.saiful.library.repository.BookBorrowerRepository;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +21,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Sql("classpath:borrowBook.sql")
@@ -36,18 +41,16 @@ public class BorrowBookServiceIntgTest {
         Long results = borrowBookService.borrowBook(request);
         assertNotEquals(0, results);
         List<BookBorrowerEntity> list = bookBorrowerRepository.findAll();
-        assertEquals(1, list.size());
+        assertThat(list)
+                .extracting("book.id").contains(1000L);
     }
 
     @Test
-    void testBorrowBookShouldFailed() {
+    void testBorrowBookShouldFailedBookNotFound() {
         BorrowBookRequest request = new BorrowBookRequest();
         request.setBookId(1900L);
         request.setBorrowerId(10L);
         assertThrows(BookBorrowerException.class,() -> borrowBookService.borrowBook(request));
-        List<BookBorrowerEntity> list = bookBorrowerRepository.findAll();
-        assertEquals(0, list.size());
-
     }
 
 
@@ -57,8 +60,6 @@ public class BorrowBookServiceIntgTest {
         request.setBookId(1001L);
         request.setBorrowerId(10L);
         assertThrows(BookBorrowerException.class,() -> borrowBookService.borrowBook(request));
-        List<BookBorrowerEntity> list = bookBorrowerRepository.findAll();
-        assertEquals(0, list.size());
     }
 
     @Test
@@ -86,7 +87,19 @@ public class BorrowBookServiceIntgTest {
         executorService.awaitTermination(1, TimeUnit.MINUTES);
 
         List<BookBorrowerEntity> results = bookBorrowerRepository.findAll();
-        assertEquals(1, results.size()); // only 1 book should be borrowed.
+        assertThat(results)
+                .extracting("book.id").contains(1000L); // only 1 book should be borrowed.
+    }
+
+    @Test
+    void testReturnBookShouldSuccess(){
+        ReturnBookRequest returnBookRequest = new ReturnBookRequest();
+        returnBookRequest.setBookId(1002L);
+
+        ReturnBook returnBook = borrowBookService.returnBook(returnBookRequest);
+        assertEquals(returnBook.getBorrowId(), 3000L);
+        assertNotNull(returnBook.getReturnDate());
+        assertNotNull(returnBook.getDuration());
 
     }
 

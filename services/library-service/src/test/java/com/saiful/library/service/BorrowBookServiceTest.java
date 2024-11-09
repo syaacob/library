@@ -1,6 +1,9 @@
 package com.saiful.library.service;
 
 import com.saiful.library.domain.BorrowBookRequest;
+import com.saiful.library.domain.ReturnBook;
+import com.saiful.library.domain.ReturnBookRequest;
+import com.saiful.library.entity.BookBorrowerEntity;
 import com.saiful.library.entity.BookEntity;
 import com.saiful.library.entity.BookStatus;
 import com.saiful.library.entity.BorrowerEntity;
@@ -14,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,6 +100,42 @@ class BorrowBookServiceTest {
         request.setBorrowerId(2L);
         request.setBookId(120L);
         assertThrows(BookBorrowerException.class,() -> borrowBookService.borrowBook(request));
+    }
+
+    @Test
+    void testReturnBookShouldSuccess() {
+        ReturnBookRequest request = new ReturnBookRequest();
+        request.setBookId(100L);
+
+        Mockito.when(bookBorrowerRepository.findNotReturnBookId(100L))
+                        .thenReturn(getBorrowBook());
+
+    borrowBookService = new BorrowBookServiceImpl(bookRepository, borrowerRepository, bookBorrowerRepository);
+        ReturnBook returnBook = borrowBookService.returnBook(request);
+        assertEquals(LocalDate.now(), returnBook.getReturnDate());
+        assertNotNull(returnBook.getDuration());
+    }
+
+    @Test
+    void testReturnBookShouldFailedNoRecords() {
+        ReturnBookRequest request = new ReturnBookRequest();
+        request.setBookId(100L);
+
+        Mockito.when(bookBorrowerRepository.findNotReturnBookId(100L))
+                .thenReturn(Optional.empty());
+
+        borrowBookService = new BorrowBookServiceImpl(bookRepository, borrowerRepository, bookBorrowerRepository);
+        assertThrows(BookBorrowerException.class, () -> borrowBookService.returnBook(request));
+    }
+
+    private Optional<BookBorrowerEntity> getBorrowBook() {
+        BookBorrowerEntity entity = new BookBorrowerEntity();
+        entity.setId(1L);
+        entity.setBorrower(getBorrower());
+        entity.setBorrowDate(LocalDateTime.of(2024,11,8,1,0));
+        entity.setBook(getAvailableBook());
+
+        return Optional.of(entity);
     }
 
     private BorrowerEntity getBorrower() {

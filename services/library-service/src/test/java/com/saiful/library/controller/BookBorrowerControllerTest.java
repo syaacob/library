@@ -34,4 +34,12 @@ class BookBorrowerControllerTest {
                 .content(json)).andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
 
+    @Test
+    void testReturnBookShouldSuccess() throws Exception {
+        String json ="{\"bookId\": 1000 }";
+        mockMvc.perform(MockMvcRequestBuilders.post("/bookBorrowers/returns")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
+
 }

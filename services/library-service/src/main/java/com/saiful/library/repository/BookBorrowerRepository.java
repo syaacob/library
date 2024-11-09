@@ -1,7 +1,6 @@
 package com.saiful.library.repository;
 
 import com.saiful.library.entity.BookBorrowerEntity;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

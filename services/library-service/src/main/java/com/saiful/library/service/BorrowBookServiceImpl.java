@@ -66,10 +66,15 @@ public class BorrowBookServiceImpl implements BorrowBookService {
     }
 
     @Override
+    @Transactional
     public ReturnBook returnBook(ReturnBookRequest request) {
         BookBorrowerEntity returnBook = bookBorrowerRepository.findNotReturnBookId(request.getBookId())
                 .orElseThrow(() -> new BookBorrowerException("cannot find borrowed books"));
         returnBook.setActualReturnDate(LocalDateTime.now());
+
+        bookBorrowerRepository.save(returnBook);
+
+        bookRepository.updateStatus(request.getBookId(), BookStatus.AVAILABLE);
 
         LocalDate borrowDate = returnBook.getBorrowDate().toLocalDate();
         LocalDate returnDate = LocalDate.now();

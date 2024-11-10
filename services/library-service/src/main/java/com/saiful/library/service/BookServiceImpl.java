@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 public class BookServiceImpl implements BookService {
@@ -41,19 +43,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> searchBook(String key, String searchBy, Integer size, Integer page) {
-        if("isbn".equals(searchBy)){
-            return bookRepository.findAllByIsbn(key, PageRequest.of(page, size))
+    public Page<Book> searchBook(Integer size, Integer page) {
+        return bookRepository.findAll( PageRequest.of(page, size))
                     .map(BookConverter::convert);
-        }
-        if("author".equals(searchBy)){
-            return bookRepository.findAllByAuthorContains(key, PageRequest.of(page, size))
-                    .map(BookConverter::convert);
-        }
-        else {
-            return bookRepository.findAllByTitleContains(key, PageRequest.of(page, size))
-                    .map(BookConverter::convert);
-        }
+
     }
 
     private boolean isValidIsbn(RegisterBook request){

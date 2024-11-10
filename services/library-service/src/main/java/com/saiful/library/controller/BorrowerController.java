@@ -2,6 +2,7 @@ package com.saiful.library.controller;
 
 import com.saiful.library.domain.RegisterBorrower;
 import com.saiful.library.service.BorrowerService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,11 @@ public class BorrowerController {
         this.borrowerService = borrowerService;
     }
 
+    @Operation(
+            description = "register new borrower API",
+            summary = "api for register new borrower"
+
+    )
     @PostMapping
     public ResponseEntity<Long> register(@Valid @RequestBody RegisterBorrower request){
         borrowerService.register(request);

@@ -67,4 +67,7 @@ The base URL for the API is: http://localhost:8080
 ### API Endpoints and Documentation
 API definition can be found in this url http://localhost:8080/swagger-ui/index.html after service successfully running
 
+## Sample Data
+Sample data can be found inside sql folder. Just execute those .sql file using your preferable sql editor connect to library_db
+
 

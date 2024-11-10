@@ -13,7 +13,7 @@ public class RegisterBook {
     private String title;
 
     @NotNull
-    @ISBN
+    @ISBN(message = "invalid isbn")
     private String isbn;
 
     @NotNull

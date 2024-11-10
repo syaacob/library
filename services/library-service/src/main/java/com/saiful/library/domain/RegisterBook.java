@@ -12,6 +12,7 @@ public class RegisterBook {
     @NotNull
     private String title;
 
+    @NotNull
     @ISBN
     private String isbn;
 

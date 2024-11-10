@@ -8,5 +8,5 @@ import org.springframework.data.domain.Page;
 public interface BookService {
     Long register(@Valid RegisterBook request);
 
-    Page<Book> searchBook(String key, String searchBy, Integer size, Integer page);
+    Page<Book> searchBook(Integer size, Integer page);
 }

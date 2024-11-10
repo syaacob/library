@@ -60,7 +60,7 @@ First, clone the repository to your local machine using Git
 ```
 docker-compose up
 ```
-please look into docker-compose.yaml file in the directory to know more on how it was set
+please look into docker-compose.yaml file in the directory to know more on how it was set including db default username and password
 ## API Documentation
 ### Base URL
 The base URL for the API is: http://localhost:8080

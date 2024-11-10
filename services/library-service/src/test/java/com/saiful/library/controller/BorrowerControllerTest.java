@@ -47,4 +47,10 @@ class BorrowerControllerTest {
         ).andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
 
+    @Test
+    void testListAllBorrowersShouldSuccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/borrowers")
+        ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
+
 }

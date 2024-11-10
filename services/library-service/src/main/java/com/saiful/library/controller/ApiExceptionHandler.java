@@ -22,7 +22,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BorrowerException.class})
     public ProblemDetail borrowerException(BorrowerException ex){
-
         ProblemDetail problemDetail = handleLibraryApiErrorResponse(ex);
         return problemDetail;
     }

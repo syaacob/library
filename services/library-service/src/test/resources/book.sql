@@ -1,0 +1,1 @@
+insert into book(id, title, author, isbn,book_status, version) values(2000, 'with old breed', 'dexter@killer','9780891419198','AVAILABLE', 0);

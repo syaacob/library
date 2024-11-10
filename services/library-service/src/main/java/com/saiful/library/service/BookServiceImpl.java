@@ -14,8 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @Slf4j
 public class BookServiceImpl implements BookService {
@@ -29,7 +27,7 @@ public class BookServiceImpl implements BookService {
     public Long register(RegisterBook request) {
         log.info("register new book {} - {}", request.getIsbn(), request.getTitle());
         if(!isValidIsbn(request)){
-            throw new BookException("invalid isbn, existing author, title miss match", HttpStatus.BAD_REQUEST);
+            throw new BookException("invalid isbn, existing author and title miss match", HttpStatus.BAD_REQUEST);
         }
 
         BookEntity bookEntity = new BookEntity();
@@ -46,7 +44,6 @@ public class BookServiceImpl implements BookService {
     public Page<Book> searchBook(Integer size, Integer page) {
         return bookRepository.findAll( PageRequest.of(page, size))
                     .map(BookConverter::convert);
-
     }
 
     private boolean isValidIsbn(RegisterBook request){
@@ -54,8 +51,8 @@ public class BookServiceImpl implements BookService {
                 PageRequest.of(0, 1,Sort.by(Sort.Direction.DESC, "id")));
         if (!existingIsbn.isEmpty()){
             BookEntity existingEntity = existingIsbn.getContent().get(0);
-            return existingEntity.getTitle().equals(request.getTitle()) &&
-                    existingEntity.getAuthor().equals(request.getAuthor());
+            return existingEntity.getTitle().equalsIgnoreCase(request.getTitle()) &&
+                    existingEntity.getAuthor().equalsIgnoreCase(request.getAuthor());
         }
         return true;
     }

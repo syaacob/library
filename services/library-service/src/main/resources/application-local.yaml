@@ -1,0 +1,10 @@
+datasource:
+  url: jdbc:postgresql://localhost:5432/library_db
+  username: postgres
+  password: postgres
+
+spring:
+  datasource:
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
